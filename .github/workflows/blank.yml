@@ -1,0 +1,42 @@
+name: Run Postman API Collection
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'   # Runs every day at 9 AM Nigeria time
+    - cron: '0 11 * * *'  # 12 PM Nigeria time
+    - cron: '0 17 * * *'  # 6 PM Nigeria time
+
+jobs:
+  run-newman:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - name: Install Newman locally
+        run: npm install newman newman-reporter-htmlextra --save-dev
+
+      - name: Create reports folder
+        run: mkdir -p ./reports
+
+      - name: Run Simple Book API
+        run: npx newman run Simple_Book_API.postman_collection.json --env-var baseUrl=https://simple-books-api.click --env-var accessToken=ee0cc8a78394d0ac261c523fbbd47f84a1fc2861a1605277488d2e3ca2eada2a --reporter-htmlextra-export reports/report.html
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: newman-report
+          path: ./reports/report.html
