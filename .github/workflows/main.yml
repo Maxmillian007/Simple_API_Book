@@ -33,7 +33,7 @@ jobs:
         run: mkdir -p ./reports
 
       - name: Run Simple Book API
-        run: npx newman run Simple_Book_API.postman_collection.json --env-var baseUrl=https://simple-books-api.click --env-var accessToken=ee0cc8a78394d0ac261c523fbbd47f84a1fc2861a1605277488d2e3ca2eada2a --reporter-htmlextra-export reports/report.html --reporters htmlextra --reporter-htmlextra-export ./reports/report.html
+        run: npx newman run Simple_Book_API.postman_collection.json --env-var baseUrl=https://simple-books-api.click --env-var accessToken=ee0cc8a78394d0ac261c523fbbd47f84a1fc2861a1605277488d2e3ca2eada2a --reporters htmlextra --reporter-htmlextra-export ./reports/report.html
       - name: Upload HTML Report
         uses: actions/upload-artifact@v5
         with:
